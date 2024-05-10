@@ -1,28 +1,24 @@
-function largestDivisibleSubset(nums) {
-  nums.sort((a, b) => a - b);
-  const dp = new Array(nums.length).fill(1);
-  let maxSubsetSize = 1;
-  let maxSubsetIdx = 0;
-  for (let i = 1; i < nums.length; i++) {
-    for (let j = 0; j < i; j++) {
-      if (nums[i] % nums[j] === 0) {
-        dp[i] = Math.max(dp[i], dp[j] + 1);
-        if (dp[i] > maxSubsetSize) {
-          maxSubsetSize = dp[i];
-          maxSubsetIdx = i;
-        }
+function canFinish(numCourses, prerequisites) {
+  const graph = new Map();
+  const visited = new Array(numCourses).fill(0);
+  for (const [course, prerequisite] of prerequisites) {
+    if (!graph.has(course)) graph.set(course, []);
+    graph.get(course).push(prerequisite);
+  }
+  for (let i = 0; i < numCourses; i++) {
+    if (!dfs(i)) return false;
+  }
+  return true;
+  function dfs(course) {
+    if (visited[course] === 1) return false;
+    if (visited[course] === -1) return true;
+    visited[course] = 1;
+    if (graph.has(course)) {
+      for (const prerequisite of graph.get(course)) {
+        if (!dfs(prerequisite)) return false;
       }
     }
+    visited[course] = -1;
+    return true;
   }
-  const result = [];
-  let prev = nums[maxSubsetIdx];
-  let count = maxSubsetSize;
-  for (let i = maxSubsetIdx; i >= 0; i--) {
-    if (prev % nums[i] === 0 && dp[i] === count) {
-      result.unshift(nums[i]);
-      prev = nums[i];
-      count--;
-    }
-  }
-  return result;
 }
