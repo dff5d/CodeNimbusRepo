@@ -1,24 +1,15 @@
-function canFinish(numCourses, prerequisites) {
-  const graph = new Map();
-  const visited = new Array(numCourses).fill(0);
-  for (const [course, prerequisite] of prerequisites) {
-    if (!graph.has(course)) graph.set(course, []);
-    graph.get(course).push(prerequisite);
+function removeNthFromEnd(head, n) {
+  const dummy = new ListNode(0);
+  dummy.next = head;
+  let first = dummy;
+  let second = dummy;
+  for (let i = 1; i <= n + 1; i++) {
+    first = first.next;
   }
-  for (let i = 0; i < numCourses; i++) {
-    if (!dfs(i)) return false;
+  while (first !== null) {
+    first = first.next;
+    second = second.next;
   }
-  return true;
-  function dfs(course) {
-    if (visited[course] === 1) return false;
-    if (visited[course] === -1) return true;
-    visited[course] = 1;
-    if (graph.has(course)) {
-      for (const prerequisite of graph.get(course)) {
-        if (!dfs(prerequisite)) return false;
-      }
-    }
-    visited[course] = -1;
-    return true;
-  }
+  second.next = second.next.next;
+  return dummy.next;
 }
