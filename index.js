@@ -1,15 +1,9 @@
-function removeNthFromEnd(head, n) {
-  const dummy = new ListNode(0);
-  dummy.next = head;
-  let first = dummy;
-  let second = dummy;
-  for (let i = 1; i <= n + 1; i++) {
-    first = first.next;
+function maxProfit(prices) {
+  let minPrice = Infinity;
+  let maxProfit = 0;
+  for (const price of prices) {
+    minPrice = Math.min(minPrice, price);
+    maxProfit = Math.max(maxProfit, price - minPrice);
   }
-  while (first !== null) {
-    first = first.next;
-    second = second.next;
-  }
-  second.next = second.next.next;
-  return dummy.next;
+  return maxProfit;
 }
